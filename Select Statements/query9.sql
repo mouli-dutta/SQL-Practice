@@ -1,0 +1,26 @@
+/*
+https://www.hackerrank.com/challenges/the-company/problem?isFullScreen=true
+*/
+
+SELECT 
+    C.company_code, 
+    C.founder, 
+    COUNT(DISTINCT E.LEAD_MANAGER_CODE), 
+    COUNT(DISTINCT SM.SENIOR_MANAGER_CODE), 
+    COUNT(DISTINCT M.MANAGER_CODE), 
+    COUNT(DISTINCT E.EMPLOYEE_CODE) 
+FROM 
+    Company C, 
+    LEAD_MANAGER LM, 
+    SENIOR_MANAGER SM, 
+    MANAGER M, 
+    EMPLOYEE E 
+WHERE 
+    C.COMPANY_CODE = LM.COMPANY_CODE 
+    AND LM.LEAD_MANAGER_CODE = SM.LEAD_MANAGER_CODE 
+    AND SM.LEAD_MANAGER_CODE = M.LEAD_MANAGER_CODE 
+    AND M.LEAD_MANAGER_CODE = E.LEAD_MANAGER_CODE 
+GROUP BY 
+    C.company_code, C.founder 
+ORDER BY 
+    C.COMPANY_CODE ASC;
