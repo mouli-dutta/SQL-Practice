@@ -1,2 +1,2 @@
 # SQL-Practice
-SQL practice questions
+This repo contains SQL practice questions from Hackerrrank.
