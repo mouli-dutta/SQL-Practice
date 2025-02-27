@@ -2,45 +2,38 @@
 https://www.hackerrank.com/challenges/challenges/problem?isFullScreen=true
 */
 
-with ChallengeCount as( 
-  select 
-    h.hacker_id,
-    h.name,
-    count(c.challenge_id) as challenge_count 
-  from Hackers h 
-  join Challenges c 
-  on h.hacker_id = c.hacker_id 
-  group by h.hacker_id,h.name
-),
 
-MaxChallengeCount as( 
-  select 
-    max(challenge_count) as max_ch_count 
-  from ChallengeCount
-),
+WITH ChallengeCounts AS ( 
+    SELECT 
+        c.hacker_id, 
+        h.name, 
+        COUNT(c.challenge_id) AS challenge_count 
+    FROM hackers h 
+    JOIN challenges c 
+    ON h.hacker_id = c.hacker_id 
+    GROUP BY c.hacker_id, h.name 
+) 
 
-CountFrequency as( 
-  select 
-    challenge_count, 
-    count(*) as count_frequency 
-  from ChallengeCount 
-  group by challenge_count
-)
+SELECT 
+    hacker_id, 
+    name, 
+    challenge_count 
+FROM ChallengeCounts 
 
-select 
-  cc.hacker_id,
-  cc.name, 
-  cc.challenge_count 
-from ChallengeCount cc 
-join CountFrequency cf 
-on cc.challenge_count=cf.challenge_count 
-join MaxChallengeCount mc 
-where cf.count_frequency=1 or cc.challenge_count=mc.max_ch_count 
-order by cc.challenge_count desc, cc.hacker_id;
+WHERE challenge_count = (
+    SELECT 
+        MAX(challenge_count) 
+    FROM ChallengeCounts
+) 
+OR 
+challenge_count NOT IN ( 
+    SELECT challenge_count 
+    FROM ChallengeCounts 
+    GROUP BY challenge_count 
+    HAVING COUNT(hacker_id) > 1 
+) 
 
-
-
-
+ORDER BY challenge_count DESC, hacker_id;
 
 
 
