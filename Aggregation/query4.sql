@@ -31,8 +31,16 @@ select round(LONG_W, 4) from station where LAT_N > 38.7780 order by LAT_N limit 
 /*
 https://www.hackerrank.com/challenges/weather-observation-station-18/problem?isFullScreen=true
 */
+with manhattan as (
+    select 
+        min(LAT_N) as a,
+        min(LONG_W) as b,
+        max(LAT_N) as c,
+        max(LONG_W) as d
+    from station
+)
 
-
+select round((abs(c-a) + abs(d-b)), 4) from manhattan;
 
 
 
