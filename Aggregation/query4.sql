@@ -31,7 +31,7 @@ select round(LONG_W, 4) from station where LAT_N > 38.7780 order by LAT_N limit 
 /*
 https://www.hackerrank.com/challenges/weather-observation-station-18/problem?isFullScreen=true
 */
-with manhattan as (
+with points as (
     select 
         min(LAT_N) as a,
         min(LONG_W) as b,
@@ -40,8 +40,31 @@ with manhattan as (
     from station
 )
 
-select round((abs(c-a) + abs(d-b)), 4) from manhattan;
+select round((abs(c-a) + abs(d-b)), 4) as manhattan_distance from points;
 
+
+
+/*
+https://www.hackerrank.com/challenges/weather-observation-station-19/problem?isFullScreen=true
+*/
+with points as (
+    select 
+        min(LAT_N) as a,
+        min(LONG_W) as b,
+        max(LAT_N) as c,
+        max(LONG_W) as d
+    from station
+)
+
+select 
+    round(
+        sqrt(
+            pow(a - c, 2) + pow(b - d, 2)
+        )
+    , 4) 
+    
+    as euclidean_distance 
+from points;
 
 
 
